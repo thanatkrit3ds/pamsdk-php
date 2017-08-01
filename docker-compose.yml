@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+    php56:
+        image: bitnami/php-fpm:5.6
+        volumes:
+            - .:/app
+            - ./dockers/unittest/php56:/bitnami/php-fpm
+    php70:
+        image: bitnami/php-fpm:7.0
+        volumes:
+            - .:/app
+            - ./dockers/unittest/php70:/bitnami/php-fpm

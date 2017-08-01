@@ -1,0 +1,31 @@
+{
+    "require": {
+        "php": ">=5.5.9",
+        "php-curl-class/php-curl-class": "^7.3",
+        "php-di/php-di": "^5.4",
+        "ext-curl": "*",
+        "psr/log": "~1.0",
+        "mcustiel/php-simple-di": ">=1.2.0",
+        "defuse/php-encryption": "^2.1"
+    },
+    "require-dev": {
+        "raveren/kint": "~0.9",
+        "phpunit/phpunit": "5.7",
+        "mockery/mockery": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "PAM\\": "classes/",
+            "Mautic\\": "lib/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mautic\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit --bootstrap vendor/autoload.php",
+        "gen-secure-key": "vendor/bin/generate-defuse-key"
+    }
+}
