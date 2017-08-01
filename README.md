@@ -23,7 +23,7 @@ Clien SDK to access PAM
 
 ### Install PAM script (Track page view)
 
- 1. Create PAM Script from your backend code and echo it into HTML before the </body> tag
+ 1. Create PAM Script from your backend code and echo it into HTML just before the ```</body>``` tag
  
     ```php
     $baseUrl = 'https://<your-pam-website>.com';
