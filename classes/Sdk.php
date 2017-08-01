@@ -11,8 +11,22 @@ use PAM\Api\Forms;
 
 class Sdk {
 
+    private $pamBaseUrl;
+    private $username;
+    private $password;
+    private $appId;
+    private $appSecret;
+
+    public function __construct($pamBaseUrl, $username, $password, $appId, $appSecret){
+        $this->pamBaseUrl = $pamBaseUrl;
+        $this->username = $username;
+        $this->password = $password;
+        $this->appId = $appId;
+        $this->appSecret = $appSecret;
+    }
+
     public function submitForm($formId, $parameters) {
-        $api = new Forms($this->createAuth(), $this->getBaseUrl());
+        $api = new Forms($this->createAuth(), $this->pamBaseUrl);
         $response = $api->submit($formId, $parameters);
         return $response;
     }
@@ -33,12 +47,10 @@ class Sdk {
     }
 
     public function createTrackingScript(array $parameters) {
-        /** @var \PAM\Config $config */
-        $config = DI::getInstance()->getService(DI::SERVICEID_CONFIG);
 
-        $scriptUrl = $config->get('pamBaseUrl').'/mtc.js';
-        $appId = $config->get('appId');
-        $appSecret = $config->get('appSecret');
+        $scriptUrl = $this->pamBaseUrl.'/mtc.js';
+        $appId = $this->appId;
+        $appSecret = $this->appSecret;
 
         /** @var \PAM\Helpers\TimeHelper $timeHelper */
         $timeHelper = DI::getInstance()->getService(DI::SERVICEID_TIMEHELPER);
@@ -71,22 +83,14 @@ class Sdk {
     }
 
     private function createAuth(){
-        /** @var \PAM\Config $config */
-        $config = DI::getInstance()->getService(DI::SERVICEID_CONFIG);
+
         $settings = array(
-            'userName'=>$config->get('username'),
-            'password'=>$config->get('password')
+            'userName'=>$this->username,
+            'password'=>$this->password
         );
 
         $initAuth = new ApiAuth();
         $auth = $initAuth->newAuth($settings, 'BasicAuth');
         return $auth;
-    }
-
-    private function getBaseUrl() {
-        /** @var \PAM\Config $config */
-        $config = DI::getInstance()->getService(DI::SERVICEID_CONFIG);
-        $baseUrl = $config->get('pamBaseUrl');
-        return $baseUrl;
     }
 }

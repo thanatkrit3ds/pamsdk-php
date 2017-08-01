@@ -8,7 +8,6 @@ use PAM\Http\HttpRequest;
 
 class DI {
 
-    const SERVICEID_CONFIG = 'pamsdk.config';
     const SERVICEID_ENCRYPTOR = 'pamsdk.encryptor';
     const SERVICEID_HTTPREQUEST = 'pamsdk.httprequest';
     const SERVICEID_HTTPCOOKIE = 'pamsdk.httpcookie';
@@ -23,9 +22,6 @@ class DI {
 
     private function registerDefaultServices(){
 
-        $this->registerService(self::SERVICEID_CONFIG, function() {
-            return new Config();
-        });
         $this->registerService(self::SERVICEID_ENCRYPTOR, function() {
             return new Encryptor();
         });

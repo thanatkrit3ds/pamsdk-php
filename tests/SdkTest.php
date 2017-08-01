@@ -5,7 +5,6 @@ require_once('vendor/autoload.php');
 use PHPUnit\Framework\TestCase;
 use PAM\Sdk;
 use PAM\DI;
-use PAM\Config;
 use PAM\Helpers\Encryptor;
 
 class SdkTest extends TestCase
@@ -15,7 +14,13 @@ class SdkTest extends TestCase
     public $sdk;
 
     public function __construct(){
-        $this->sdk = new Sdk();
+        $pamUrl = 'https://pam-tesco.com';
+        $username = '3ds';
+        $password = 'interactive';
+        $appId = '1978544d7488415980feeb56b1312a2a';
+        $appSecret = 'def0000081ffc5d04b7e61894e7dc8bb6e4ba104f875c35185cac64526c96358bc3a5de1d4198d34a994d7c28ef9dec47120325aaf28c0c7ab7b79984f8adcc5b5014fa5';
+
+        $this->sdk = new Sdk($pamUrl, $username, $password, $appId, $appSecret);
     }
 
     public function testFormSubmit(){
@@ -44,10 +49,8 @@ class SdkTest extends TestCase
                 $posts['age'] == 10;
 
             //Assert Headers
-            /** @var \PAM\Config $config */
-            $config = DI::getInstance()->getService(DI::SERVICEID_CONFIG);
-            $username = $config->get('username');
-            $password = $config->get('password');
+            $username = '3ds';
+            $password = 'interactive';
             $expectedAuthHeader = 'Authorization: Basic ' . base64_encode($username.':'.$password);
 
             $headers = $args[CURLOPT_HTTPHEADER];
@@ -120,11 +123,9 @@ class SdkTest extends TestCase
             'timestamp' => '9999999999'
         ];
 
-        /** @var \PAM\Config $config */
-        $config = DI::getInstance()->getService(DI::SERVICEID_CONFIG);
-        $appId = $config->get('appId');
-        $secret = $config->get('appSecret');
-        $scriptUrl = $config->get('pamBaseUrl').'/mtc.js';
+        $appId = '1978544d7488415980feeb56b1312a2a';
+        $secret = 'def0000081ffc5d04b7e61894e7dc8bb6e4ba104f875c35185cac64526c96358bc3a5de1d4198d34a994d7c28ef9dec47120325aaf28c0c7ab7b79984f8adcc5b5014fa5';
+        $scriptUrl = 'https://pam-tesco.com/mtc.js';
 
         $actualScript = $sdk->createTrackingScript($mockTrackingData);
 
@@ -136,10 +137,6 @@ class SdkTest extends TestCase
         $actualTrackingData = $encryptor->decryptArray($actualHash, $secret);
 
         $this->assertEquals($cleanTrackingData, $actualTrackingData);
-    }
-
-    private function printResult($result){
-        echo "\n".json_encode($result, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
     }
 
     public function tearDown() {
