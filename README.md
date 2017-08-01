@@ -45,17 +45,14 @@ Clien SDK to access PAM
      ![Screen-shot of page-view event post request](/screenshots/inspect-event.png?raw=true "Screen-shot of page-view event post request")
      
      
-
 ## Form Submit
 
-You can forward form submit data to PAM by calling method from SDK and send submit data with the request.
-
-    ```php
-    $result = $sdk->submitForm('1', //formId must match the formId in PAM backend 
-        [
-            'param-1' => 'value-1',
-            'param-2' => 'value-2',
-            ...
-            'param-N' => 'value-N'
-        ]);
-    ```
+```php 
+$result = $sdk->submitForm('1', //formId must match the formId received from PAM backend
+    [
+        'param-1' => 'value-1',
+        'param-2' => 'value-2',
+        ...
+        'param-N' => 'value-N'
+    ]);
+```
