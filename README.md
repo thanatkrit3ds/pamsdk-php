@@ -33,13 +33,29 @@ Clien SDK to access PAM
     $sdk = new \PAM\Sdk($baseUrl, $username, $password, $appId, $secret);
     $pamScript = $sdk->createTrackingScript(
         [
-            'linemid' => '12345',
-            'mobilephone' => '0899999999',
-            'email' => 'hello@world.com',
-            'content-tags' => $sdk->createTags(['tag1','tag2','tag3'])
+            'field-1' => 'value-1',
+            'field-2' => 'value-2',
+            'field-N' => 'value-N',
+            'content-tags' => $sdk->createTags(['content-tag1','content-tag2'])
         ]);
     ```
   
  1. After install the script in HTML page then verify the script by inspecting the network request from your browser when load page; you will see the POST request /event call with JSON response id and sid
  
- ![Screen-shot of page-view event post request](/screenshots/inspect-event.png?raw=true "Screen-shot of page-view event post request")
+     ![Screen-shot of page-view event post request](/screenshots/inspect-event.png?raw=true "Screen-shot of page-view event post request")
+     
+     
+
+## Form Submit
+
+You can forward form submit data to PAM by calling method from SDK and send submit data with the request.
+
+    ```php
+    $result = $sdk->submitForm('1', //formId must match the formId in PAM backend 
+        [
+            'param-1' => 'value-1',
+            'param-2' => 'value-2',
+            ...
+            'param-N' => 'value-N'
+        ]);
+    ```
