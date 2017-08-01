@@ -1,4 +1,5 @@
 {
+    "name": "pushandmotion/pamsdk-php",
     "require": {
         "php": ">=5.5.9",
         "php-curl-class/php-curl-class": "^7.3",
