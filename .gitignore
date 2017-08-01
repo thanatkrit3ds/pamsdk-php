@@ -2,3 +2,4 @@ vendor
 .idea
 dockers/unittest/php70
 dockers/unittest/php56
+composer.lock
