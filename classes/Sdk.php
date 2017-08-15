@@ -65,6 +65,24 @@ class Sdk {
         return "<script>(function(w,d,t,u,n,a,m){w['MauticTrackingObject']=n;w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)},a=d.createElement(t),m=d.getElementsByTagName(t)[0];a.async=1;a.src=u;m.parentNode.insertBefore(a,m)})(window,document,'script','$scriptUrl','mt');mt('send', 'pageview', {'app_id':'$appId','updfh':'$fieldsHash'});</script>";
     }
 
+    public function createTrackingToken(array $parameters) {
+
+        $appId = $this->appId;
+        $appSecret = $this->appSecret;
+
+        /** @var \PAM\Helpers\TimeHelper $timeHelper */
+        $timeHelper = DI::getInstance()->getService(DI::SERVICEID_TIMEHELPER);
+        $parameters['timestamp'] = $timeHelper->now();
+
+        $parameters = $this->removeNullAndEmptyValueFromArray($parameters);
+
+        /** @var \PAM\Helpers\Encryptor $encryptor */
+        $encryptor = DI::getInstance()->getService(DI::SERVICEID_ENCRYPTOR);
+        $fieldsHash = $encryptor->encryptArray($parameters, $appSecret);
+
+        return ['updfh'=>$fieldsHash, 'pamserver'=>$this->pamBaseUrl];
+    }
+
     private function removeNullAndEmptyValueFromArray(array $assocArray) {
         $newArray = [];
         foreach($assocArray as $key => $value) {
