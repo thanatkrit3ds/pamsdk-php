@@ -17,7 +17,7 @@ class Sdk {
     private $appId;
     private $appSecret;
 
-    public function __construct($pamBaseUrl, $username, $password, $appId, $appSecret){
+    public function __construct($pamBaseUrl, $username, $password, $appId='', $appSecret=''){
         $this->pamBaseUrl = $pamBaseUrl;
         $this->username = $username;
         $this->password = $password;
@@ -102,10 +102,17 @@ class Sdk {
 
     private function createAuth(){
 
-        $settings = array(
+        $settings = $settings = [
             'userName'=>$this->username,
             'password'=>$this->password
-        );
+        ];
+
+        if(!empty($this->appId) && !empty($this->appSecret)){
+            $settings = [
+                'userName'=>$this->appId,
+                'password'=>$this->appSecret
+            ];
+        }
 
         $initAuth = new ApiAuth();
         $auth = $initAuth->newAuth($settings, 'BasicAuth');
