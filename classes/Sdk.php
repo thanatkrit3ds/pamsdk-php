@@ -31,6 +31,10 @@ class Sdk {
         return $response;
     }
 
+    public function callRESTTracking(array $parameters) {
+        
+    }
+
     public function createTags(array $tags) {
         if($tags == null || count($tags) == 0) {
             return null;
