@@ -25,69 +25,7 @@ class SdkTest extends TestCase
         $this->sdkNoAppId = new Sdk($pamUrl, $username, $password);
     }
 
-    public function testFormSubmit_WithAppId_ExpectUsingAppIdAuthentication(){
-        $sdk = $this->sdk;
-
-        //Mock Cookies
-        $expectedCookies = [
-            'mtc_id' => '2',
-            'hello' => 'world'
-        ];
-        $mockCookies = Mockery::mock('\PAM\Http\HttpCookie');
-        $mockCookies->shouldReceive('getAll')->once()->andReturn($expectedCookies)->once();
-        $expectedCookiesString = 'mtc_id=2&hello=world';
-
-        //Mock Request Endpoint
-        $mockHttp = Mockery::mock('\PAM\Http\HttpRequest');
-        $mockHttp->shouldReceive('init')->once();
-        $mockHttp->shouldReceive('setOptions')->once()->with(Mockery::on(function($args) use ($expectedCookiesString) {
-
-            //Assert Post Vars
-            $posts = [];
-            parse_str($args[CURLOPT_POSTFIELDS], $posts);
-            $assertPosts =
-                $posts['email'] == 'chaiyapong@3dsinteractive.com' &&
-                $posts['gender'] == 1 &&
-                $posts['age'] == 10;
-
-            //Assert Headers
-            $username = '1978544d7488415980feeb56b1312a2a';
-            $password = 'def0000081ffc5d04b7e61894e7dc8bb6e4ba104f875c35185cac64526c96358bc3a5de1d4198d34a994d7c28ef9dec47120325aaf28c0c7ab7b79984f8adcc5b5014fa5';
-            $expectedAuthHeader = 'Authorization: Basic ' . base64_encode($username.':'.$password);
-
-            $headers = $args[CURLOPT_HTTPHEADER];
-            $assertHeaders =
-                in_array('Accept: application/json', $headers) &&
-                in_array($expectedAuthHeader, $headers) &&
-                in_array('Cookie: '.$expectedCookiesString, $headers);
-
-            return $assertPosts && $assertHeaders;
-        }));
-        $mockApiResult = '{"email":"chaiyapong@3dsinteractive.com"}';
-        $mockHttp->shouldReceive('execute')->once()->andReturn($mockApiResult);
-        $mockHttp->shouldReceive('getInfo')->once();
-        $mockHttp->shouldReceive('close')->once();
-
-        //Setup DI.
-        $di = DI::getInstance();
-        $di->registerService(DI::SERVICEID_HTTPREQUEST, function() use ($mockHttp){
-            return $mockHttp;
-        });
-        $di->registerService(DI::SERVICEID_HTTPCOOKIE, function() use ($mockCookies){
-            return $mockCookies;
-        });
-
-        $result = $sdk->submitForm('1', [
-            'email'=>'chaiyapong@3dsinteractive.com',
-            'gender'=>1,
-            'age'=>10
-        ]);
-
-        $mockApiResultArray = json_decode($mockApiResult, true);
-        $this->assertEquals($mockApiResultArray, $result);
-    }
-
-    public function testFormSubmit_GivenNoAppId_ExpectUsingEmailAuthentication(){
+    public function testFormSubmit_GivenUserNamePasswordCookiesAndPostVars_ExpectAllInformationHasBeenDelivered(){
         $sdk = $this->sdkNoAppId;
 
         //Mock Cookies

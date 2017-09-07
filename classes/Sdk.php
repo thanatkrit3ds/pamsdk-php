@@ -107,13 +107,6 @@ class Sdk {
             'password'=>$this->password
         ];
 
-        if(!empty($this->appId) && !empty($this->appSecret)){
-            $settings = [
-                'userName'=>$this->appId,
-                'password'=>$this->appSecret
-            ];
-        }
-
         $initAuth = new ApiAuth();
         $auth = $initAuth->newAuth($settings, 'BasicAuth');
         return $auth;
