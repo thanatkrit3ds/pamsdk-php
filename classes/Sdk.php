@@ -32,7 +32,7 @@ class Sdk {
     }
 
     public function callRESTTracking(array $parameters) {
-        
+
     }
 
     public function createTags(array $tags) {
