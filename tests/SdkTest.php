@@ -43,7 +43,9 @@ class SdkTest extends TestCase
             //Assert Post Vars
             $posts = [];
             parse_str($args[CURLOPT_POSTFIELDS], $posts);
-            $assertPosts = $posts['app_id'] == '1978544d7488415980feeb56b1312a2a';
+            $assertPosts = $posts['app_id'] == '1978544d7488415980feeb56b1312a2a' &&
+                $posts['page_title'] == 'my title' &&
+                $posts['page_url'] == 'http://testurl';
             $actualHash =  $posts['updfh'];
 
             $encryptor = new Encryptor();
@@ -103,8 +105,7 @@ class SdkTest extends TestCase
             return $mockTimeHelper;
         });
 
-        $result = $sdk->callRESTTracking($mockTrackingData);
-
+        $result = $sdk->callRESTTracking($mockTrackingData, 'my title', 'http://testurl');
         $mockApiResultArray = json_decode($mockApiResult, true);
         $this->assertEquals($mockApiResultArray, $result);
     }

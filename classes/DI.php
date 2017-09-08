@@ -5,6 +5,7 @@ use PAM\Helpers\Encryptor;
 use PAM\Helpers\TimeHelper;
 use PAM\Http\HttpCookie;
 use PAM\Http\HttpRequest;
+use PAM\Http\HttpServer;
 
 class DI {
 
@@ -12,6 +13,7 @@ class DI {
     const SERVICEID_HTTPREQUEST = 'pamsdk.httprequest';
     const SERVICEID_HTTPCOOKIE = 'pamsdk.httpcookie';
     const SERVICEID_TIMEHELPER = 'pamsdk.timehelper';
+    const SERVICEID_HTTPSERVER = 'pamsdk.httpserver';
 
     private $container;
 
@@ -33,6 +35,9 @@ class DI {
         });
         $this->registerService(self::SERVICEID_TIMEHELPER, function() {
             return new TimeHelper();
+        });
+        $this->registerService(self::SERVICEID_HTTPSERVER, function() {
+            return new HttpServer();
         });
     }
 

@@ -9,6 +9,7 @@ use Mautic\MauticApi;
 use Mautic\Api\Emails;
 use PAM\Api\Forms;
 use PAM\Http\HttpRequest;
+use PAM\Http\HttpServer;
 use PAM\REST\Event;
 
 class Sdk {
@@ -33,23 +34,40 @@ class Sdk {
         return $response;
     }
 
-    public function callRESTTracking(array $parameters) {
+    public function callRESTTracking(array $identityParameters, $pageTitle, $pageUrl=null, $pageReferrer=null, $pageLanguage=null) {
 
         $appId = $this->appId;
         $appSecret = $this->appSecret;
 
         /** @var \PAM\Helpers\TimeHelper $timeHelper */
         $timeHelper = DI::getInstance()->getService(DI::SERVICEID_TIMEHELPER);
-        $parameters['timestamp'] = $timeHelper->now();
+        $identityParameters['timestamp'] = $timeHelper->now();
 
-        $parameters = $this->removeNullAndEmptyValueFromArray($parameters);
+        $identityParameters = $this->removeNullAndEmptyValueFromArray($identityParameters);
 
         /** @var \PAM\Helpers\Encryptor $encryptor */
         $encryptor = DI::getInstance()->getService(DI::SERVICEID_ENCRYPTOR);
-        $fieldsHash = $encryptor->encryptArray($parameters, $appSecret);
+        $fieldsHash = $encryptor->encryptArray($identityParameters, $appSecret);
 
         $api = new Event($this->createRestAuth(), $this->pamBaseUrl);
-        $response = $api->sendEvent(['app_id'=>$appId,'updfh'=>$fieldsHash]);
+
+        /** @var HttpServer $server */
+        $server = DI::getInstance()->getService(DI::SERVICEID_HTTPSERVER);
+        if($pageUrl == null){
+            $pageUrl = $server->get('HTTP_REFERER');
+        }
+
+        $parameters = ['app_id'=>$appId,'updfh'=>$fieldsHash];
+        $parameters['page_title'] = $pageTitle;
+        $parameters['page_url'] = $pageUrl;
+        if($pageReferrer != null){
+            $parameters['page_referrer'] = $pageReferrer;
+        }
+        if($pageLanguage != null){
+            $parameters['page_language'] = $pageLanguage;
+        }
+        $response = $api->sendEvent($parameters);
+
         return $response;
     }
 
