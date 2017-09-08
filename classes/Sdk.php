@@ -34,7 +34,7 @@ class Sdk {
         return $response;
     }
 
-    public function callRESTTracking(array $identityParameters, $pageTitle, $pageUrl=null, $pageReferrer=null, $pageLanguage=null) {
+    public function callRESTTracking(array $identityParameters, $pageTitle, $pageUrl=null, $pageReferrer=null, $pageLanguage=null, $timezoneOffset=-420, $platform='api') {
 
         $appId = $this->appId;
         $appSecret = $this->appSecret;
@@ -65,6 +65,12 @@ class Sdk {
         }
         if($pageLanguage != null){
             $parameters['page_language'] = $pageLanguage;
+        }
+        if($timezoneOffset != null){
+            $parameters['timezone_offset'] = $timezoneOffset;
+        }
+        if($platform != null){
+            $parameters['platform'] = $platform;
         }
         $response = $api->sendEvent($parameters);
 

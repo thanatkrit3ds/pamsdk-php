@@ -45,7 +45,9 @@ class SdkTest extends TestCase
             parse_str($args[CURLOPT_POSTFIELDS], $posts);
             $assertPosts = $posts['app_id'] == '1978544d7488415980feeb56b1312a2a' &&
                 $posts['page_title'] == 'my title' &&
-                $posts['page_url'] == 'http://testurl';
+                $posts['page_url'] == 'http://testurl' &&
+                $posts['timezone_offset'] == '-420' &&
+                $posts['platform'] == 'api';
             $actualHash =  $posts['updfh'];
 
             $encryptor = new Encryptor();
