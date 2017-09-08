@@ -180,6 +180,7 @@ abstract class AbstractAuth implements AuthInterface
          */
         $http = DI::getInstance()->getService(DI::SERVICEID_HTTPREQUEST);
         $http->init();
+
         $http->setOptions($options);
         $response = $http->execute();
         $responseArray              = explode("\r\n\r\n", $response);

@@ -8,6 +8,8 @@ use Mautic\Auth\ApiAuth;
 use Mautic\MauticApi;
 use Mautic\Api\Emails;
 use PAM\Api\Forms;
+use PAM\Http\HttpRequest;
+use PAM\REST\Event;
 
 class Sdk {
 
@@ -33,6 +35,22 @@ class Sdk {
 
     public function callRESTTracking(array $parameters) {
 
+        $appId = $this->appId;
+        $appSecret = $this->appSecret;
+
+        /** @var \PAM\Helpers\TimeHelper $timeHelper */
+        $timeHelper = DI::getInstance()->getService(DI::SERVICEID_TIMEHELPER);
+        $parameters['timestamp'] = $timeHelper->now();
+
+        $parameters = $this->removeNullAndEmptyValueFromArray($parameters);
+
+        /** @var \PAM\Helpers\Encryptor $encryptor */
+        $encryptor = DI::getInstance()->getService(DI::SERVICEID_ENCRYPTOR);
+        $fieldsHash = $encryptor->encryptArray($parameters, $appSecret);
+
+        $api = new Event($this->createRestAuth(), $this->pamBaseUrl);
+        $response = $api->sendEvent(['app_id'=>$appId,'updfh'=>$fieldsHash]);
+        return $response;
     }
 
     public function createTags(array $tags) {
@@ -102,6 +120,17 @@ class Sdk {
         }
 
         return $newArray;
+    }
+
+    private function createRestAuth(){
+
+        $settings = $settings = [
+            'apiKey'=>$this->appId,
+            'apiSecret'=>$this->appSecret
+        ];
+
+        $initAuth = new ApiAuth();
+        return $initAuth->newAuth($settings, 'RestAuth');
     }
 
     private function createAuth(){
