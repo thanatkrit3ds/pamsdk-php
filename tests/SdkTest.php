@@ -179,7 +179,7 @@ class SdkTest extends TestCase
         $this->assertEquals($expectedTags, $actualTags);
     }
 
-    public function testCreateTrackingScript_ExpectUpdatableFieldHasBeenEncrypted(){
+    public function testCreateTrackingScript_ExpectUpdatableFieldHasBeenCorrectlyEncrypted(){
         $sdk = $this->sdk;
 
         $mockTrackingData = [
@@ -223,6 +223,35 @@ class SdkTest extends TestCase
         $actualTrackingData = $encryptor->decryptArray($actualHash, $secret);
 
         $this->assertEquals($cleanTrackingData, $actualTrackingData);
+    }
+
+    public function testCreateTrackingScript_GivenWrongDecryptionKey_ExpectExceptionHasThrown(){
+        $sdk = $this->sdk;
+
+        $mockTrackingData = [
+            'linemid'=>'123456789',
+            'clubcard'=>'634009100131474921',
+            'mobilenumber'=>'0999999999',
+            'email'=>'chaiyapong@3dsinteractive.com',
+            'content-tags' => $sdk->createTags(['abc', 'def']),
+            'appmid'=> null,
+            'webmid'=> '  ', //empty string with more space
+            'fbuid'=> ''
+        ];
+
+        $actualScript = $sdk->createTrackingScript($mockTrackingData);
+
+        $appId = '1978544d7488415980feeb56b1312a2a';
+        $scriptUrl = 'https://pam-tesco.com/mtc.js';
+        //Get only actual hash part of script to test convert back to object (because the hash is not the same even we use the same value and secret key)
+        $actualHash = str_replace("<script>(function(w,d,t,u,n,a,m){w['MauticTrackingObject']=n;w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)},a=d.createElement(t),m=d.getElementsByTagName(t)[0];a.async=1;a.src=u;m.parentNode.insertBefore(a,m)})(window,document,'script','$scriptUrl','mt');mt('send', 'pageview', {'app_id':'$appId','updfh':'", '', $actualScript);
+        $actualHash = str_replace("'});</script>", '', $actualHash);
+
+        $encryptor = new Encryptor();
+        $wrongSecret = 'def00000a15d3df86b460c23a55e45f6109114788743c29e76284b807371ac81b1d601ff0ad82009608bbeb1a280367f0e331a39882f5dc16c41683ad711e7299318236d';
+
+        $this->expectException('Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException');
+        $encryptor->decryptArray($actualHash, $wrongSecret);
     }
 
     public function tearDown() {
