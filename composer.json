@@ -1,7 +1,7 @@
 {
     "name": "pushandmotion/pamsdk-php",
     "description": "PAM PHP client.",
-    "version": "1.0.0",
+    "version": "@dev",
     "require": {
         "php": ">=5.5.9",
         "php-curl-class/php-curl-class": "^7.3",
@@ -18,7 +18,7 @@
     },
     "autoload": {
         "psr-4": {
-            "PAM\\": "classes/",
+            "PAM\\Sdk\\": "src/",
             "Mautic\\": "lib/"
         }
     },

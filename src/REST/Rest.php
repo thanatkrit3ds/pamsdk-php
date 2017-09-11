@@ -7,7 +7,7 @@
  * @license     MIT http://opensource.org/licenses/MIT
  */
 
-namespace PAM\REST;
+namespace PAM\Sdk\REST;
 
 use Mautic\QueryBuilder\QueryBuilder;
 use Mautic\Auth\ApiAuth;
@@ -15,8 +15,8 @@ use Mautic\Auth\AuthInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use PAM\Http\HttpCookie;
-use PAM\DI;
+use PAM\Sdk\Http\HttpCookie;
+use PAM\Sdk\DI;
 
 /**
  * Base Rest class

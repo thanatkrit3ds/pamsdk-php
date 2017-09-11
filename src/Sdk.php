@@ -1,4 +1,4 @@
-<?php namespace PAM;
+<?php namespace PAM\Sdk;
 
 use Curl\Curl;
 use Defuse\Crypto\Crypto;
@@ -7,10 +7,10 @@ use Josantonius\Cookie\Cookie;
 use Mautic\Auth\ApiAuth;
 use Mautic\MauticApi;
 use Mautic\Api\Emails;
-use PAM\Api\Forms;
-use PAM\Http\HttpRequest;
-use PAM\Http\HttpServer;
-use PAM\REST\Event;
+use PAM\Sdk\Api\Forms;
+use PAM\Sdk\Http\HttpRequest;
+use PAM\Sdk\Http\HttpServer;
+use PAM\Sdk\REST\Event;
 
 class Sdk {
 

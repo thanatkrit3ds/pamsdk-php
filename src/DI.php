@@ -1,11 +1,11 @@
-<?php namespace PAM;
+<?php namespace PAM\Sdk;
 
 use Mcustiel\DependencyInjection\DependencyInjectionService;
-use PAM\Helpers\Encryptor;
-use PAM\Helpers\TimeHelper;
-use PAM\Http\HttpCookie;
-use PAM\Http\HttpRequest;
-use PAM\Http\HttpServer;
+use PAM\Sdk\Helpers\Encryptor;
+use PAM\Sdk\Helpers\TimeHelper;
+use PAM\Sdk\Http\HttpCookie;
+use PAM\Sdk\Http\HttpRequest;
+use PAM\Sdk\Http\HttpServer;
 
 class DI {
 

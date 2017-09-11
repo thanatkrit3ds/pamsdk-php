@@ -1,4 +1,4 @@
-<?php namespace PAM\Http;
+<?php namespace PAM\Sdk\Http;
 
 class HttpCookie {
 
