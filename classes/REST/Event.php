@@ -1,5 +1,5 @@
 <?php
-namespace PAM\Sdk\REST;
+namespace PAM\REST;
 
 class Event extends Rest{
 

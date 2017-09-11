@@ -1,4 +1,4 @@
-<?php namespace PAM\Sdk\Helpers;
+<?php namespace PAM\Helpers;
 
 use Defuse\Crypto\Key;
 use Defuse\Crypto\Crypto;

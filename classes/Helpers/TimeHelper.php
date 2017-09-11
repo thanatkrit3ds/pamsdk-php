@@ -1,4 +1,4 @@
-<?php namespace PAM\Sdk\Helpers;
+<?php namespace PAM\Helpers;
 
 class TimeHelper {
 

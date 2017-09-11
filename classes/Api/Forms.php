@@ -1,5 +1,5 @@
 <?php
-namespace PAM\Sdk\Api;
+namespace PAM\Api;
 
 use Mautic\Api\Forms as MauticForms;
 

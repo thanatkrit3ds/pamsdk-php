@@ -3,9 +3,9 @@
 require_once('vendor/autoload.php');
 
 use PHPUnit\Framework\TestCase;
-use PAM\Sdk\Sdk;
-use PAM\Sdk\DI;
-use PAM\Sdk\Helpers\Encryptor;
+use PAM\Sdk;
+use PAM\DI;
+use PAM\Helpers\Encryptor;
 
 class SdkTest extends TestCase
 {

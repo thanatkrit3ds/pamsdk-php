@@ -1,4 +1,4 @@
-<?php namespace PAM\Sdk\Http;
+<?php namespace PAM\Http;
 
 class HttpServer {
     public function get($key) {
